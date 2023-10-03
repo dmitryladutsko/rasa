@@ -8,6 +8,7 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - your_balance
 
 responses:
   utter_greet:
@@ -25,6 +26,9 @@ responses:
 
   utter_goodbye:
   - text: "Bye"
+
+  utter_your_balance:
+  - text: "Your balance is 1000$"
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."

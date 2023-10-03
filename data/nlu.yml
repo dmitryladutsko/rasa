@@ -83,6 +83,10 @@ nlu:
     - so saad
     - so sad
 
+- intent: utter_your_balance
+  examples: |
+    - what is my balance?
+
 - intent: bot_challenge
   examples: |
     - are you a bot?
