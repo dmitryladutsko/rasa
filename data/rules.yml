@@ -26,6 +26,17 @@ rules:
     - active_loop: null
     - slot_was_set:
       - requested_slot: null
-    - action: utter_got_your_credentials
+    - action: action_check_auth
+    - slot_was_set:
+        - is_authenticated: true
     - action: action_your_balance
     - action: utter_your_balance
+
+- rule: Generate New Password
+  condition:
+  - active_loop: user_credentials
+  steps:
+  - intent: send_me_code
+  - action: action_generate_password
+  - action: user_credentials
+  - active_loop: user_credentials

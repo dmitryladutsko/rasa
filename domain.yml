@@ -11,9 +11,12 @@ intents:
   - my_balance
   - provide_email
   - provide_password
+  - send_me_code
 
 actions:
   - action_your_balance
+  - action_generate_password
+  - action_check_auth
 
 entities:
   - email
@@ -73,14 +76,14 @@ responses:
   - text: "Provide password"
 
   utter_got_your_credentials:
-  - text: "Gotcha!"
-
-session_config:
-  session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  - text: "Got you credentials successfully!"
 
 forms:
   user_credentials:
     required_slots:
       - user_email
       - user_password
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

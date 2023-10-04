@@ -1,6 +1,16 @@
 version: "3.1"
 
 nlu:
+- intent: send_me_code
+  examples: |
+    - code
+    - otp
+    - OTP
+    - give otp
+    - generate otp
+    - Please, generate the code
+    - Give me the code
+    - Send me SMS with the code
 - intent: greet
   examples: |
     - hey
