@@ -11,14 +11,13 @@ intents:
   - my_balance
   - provide_email
   - provide_password
-#
+
 actions:
   - action_your_balance
 
 entities:
   - email
   - password
-#  - balance_value
 
 slots:
   user_email:
@@ -27,14 +26,12 @@ slots:
       mappings:
       - type: from_entity
         entity: email
-#          intent: provide_email
   user_password:
       type: text
       influence_conversation: true
       mappings:
       - type: from_entity
         entity: password
-#          intent: provide_password
   is_authenticated:
       type: bool
       influence_conversation: true
@@ -87,12 +84,3 @@ forms:
     required_slots:
       - user_email
       - user_password
-
-#action_metadata:
-#  action_ask_email:
-#    utter_ask_email:
-#    - text: "Please provide your email."
-#
-#  action_ask_password:
-#    utter_ask_password:
-#    - text: "Please provide your password."

@@ -11,15 +11,7 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
-#
-#- rule: Ask for email
-#  condition:
-#    - active_loop: null
-#  steps:
-#    - intent: your_balance
-#    - action: action_ask_email
-#    - active_loop: action_ask_email
-#
+
 - rule: Ask for credentials
   steps:
     - intent: my_balance
