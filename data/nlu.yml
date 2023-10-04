@@ -83,13 +83,28 @@ nlu:
     - so saad
     - so sad
 
-- intent: utter_your_balance
-  examples: |
-    - what is my balance?
-
 - intent: bot_challenge
   examples: |
     - are you a bot?
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: my_balance
+  examples: |
+    - what is my balance?
+    - my balance
+    - whats on my account
+    - my account
+
+- intent: provide_email
+  examples: |
+    - my email is [dima@gmail.com](email)
+    - [dima@gmail.com](email)
+    - mail [dima@gmail.com](email)
+
+- intent: provide_password
+  examples: |
+    - my pass is [123456](password)
+    - [123456](password)
+    - pass [123456](password)

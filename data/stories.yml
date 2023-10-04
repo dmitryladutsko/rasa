@@ -9,13 +9,6 @@ stories:
   - intent: mood_great
   - action: utter_happy
 
-- story: balance path
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: your_balance
-  - action: utter_your_balance
-
 - story: sad path 1
   steps:
   - intent: greet
@@ -35,3 +28,18 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+#- story: check user's balance
+#  steps:
+#    - intent: greet
+#    - action: utter_greet
+#    - intent: my_balance
+#    - action: utter_provide_email
+#    - intent: provide_email
+#      entities:
+#        - email: dima@gmail.com
+#    - action: utter_provide_password
+#    - intent: provide_password
+#      entities:
+#        - password: 123456
+#    - action: utter_your_balance

@@ -1,2 +1,5 @@
-.env/
+.env
 /.rasa/
+/models/
+/story_graph.dot
+actions/__pycache__/
