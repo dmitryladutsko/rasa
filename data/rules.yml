@@ -15,7 +15,8 @@ rules:
 - rule: Ask for credentials
   steps:
     - intent: my_balance
-    - action: user_credentials
+    - action: utter...
+    - action: user_credentials  #form_user_credentials
     - active_loop: user_credentials
 
 - rule: Submit user form

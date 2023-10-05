@@ -9,11 +9,12 @@ class RedisService:
     def __init__(self, user_email, user_otp):
         self.user_otp = user_otp
         self.user_email = user_email
-        self.client = redis.Redis(
-                                  host=os.environ.get('HOST'),
-                                  port=int(os.environ.get('PORT')),
-                                  db=int(os.environ.get('DB'))
-                                    )
+        self.connection_pool = redis.ConnectionPool(
+                                                     host=os.environ.get('HOST'),
+                                                     port=int(os.environ.get('PORT')),
+                                                     db=int(os.environ.get('DB'))
+                                                        )
+        self.client = redis.StrictRedis(connection_pool=self.connection_pool)
 
     async def store_password(self) -> None:
         """Stores password in Redis"""

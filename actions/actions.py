@@ -15,8 +15,8 @@ class ActionYourBalance(Action):
         return "action_your_balance"
 
     async def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+                  tracker: Tracker,
+                  domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         return [SlotSet("balance_value", str(random.randint(0, 99999)) + '$')]
 

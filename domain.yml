@@ -79,7 +79,7 @@ responses:
   - text: "Got you credentials successfully!"
 
 forms:
-  user_credentials:
+  form_user_credentials:
     required_slots:
       - user_email
       - user_password
