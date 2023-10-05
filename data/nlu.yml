@@ -109,12 +109,12 @@ nlu:
 
 - intent: provide_email
   examples: |
-    - my email is [dima@gmail.com](email)
-    - [dima@gmail.com](email)
-    - mail [dima@gmail.com](email)
+    - my email is [dima@gmail.com](entity_email)
+    - [dima@gmail.com](entity_email)
+    - mail [dima@gmail.com](entity_email)
 
 - intent: provide_password
   examples: |
-    - my pass is [123456](password)
-    - [123456](password)
-    - pass [123456](password)
+    - my pass is [123456](entity_password)
+    - [123456](entity_password)
+    - pass [123456](entity_password)

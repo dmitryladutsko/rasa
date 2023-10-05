@@ -12,14 +12,15 @@ class RedisService:
         self.connection_pool = redis.ConnectionPool(
                                                      host=os.environ.get('HOST'),
                                                      port=int(os.environ.get('PORT')),
-                                                     db=int(os.environ.get('DB'))
+                                                     db=int(os.environ.get('DB')),
+                                                     decode_responses=True
                                                         )
         self.client = redis.StrictRedis(connection_pool=self.connection_pool)
 
-    async def store_password(self) -> None:
+    def store_password(self) -> None:
         """Stores password in Redis"""
         self.client.setex(self.user_email, 300, self.user_otp)
 
-    async def check_user(self) -> bool:
+    def check_user(self) -> bool:
         """Checks if user exists with such credentials"""
         return self.client.get(self.user_email) == self.user_otp
