@@ -3,3 +3,4 @@
 /models/
 /story_graph.dot
 actions/__pycache__/
+/results/

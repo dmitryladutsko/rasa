@@ -3,10 +3,6 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
   - bot_challenge
   - my_balance
   - provide_email
@@ -16,7 +12,6 @@ intents:
 actions:
   - action_your_balance
   - action_ask_form_user_credentials_slot_user_password
-#  - action_check_auth
   - validate_form_user_credentials
 
 entities:
@@ -59,8 +54,6 @@ slots:
     mappings:
       - type: custom
 
-
-
 responses:
   utter_greet:
   - text: "Hey! How are you?"
@@ -89,6 +82,11 @@ responses:
 
   utter_got_your_credentials:
   - text: "Got you credentials successfully!"
+
+  utter_named_greet:
+  - text: "Hey {slot_user_email}!"
+  - text: "Hello {slot_user_email}!"
+  - text: "Hi {slot_user_email}!"
 
 forms:
   form_user_credentials:

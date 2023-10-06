@@ -1,10 +1,39 @@
 version: "3.1"
 
 stories:
-
-- story: happy path
+- story: Submit User Form
   steps:
+  - intent: session_start
+  - action: action_session_start
+  - active_loop: form_user_credentials
+  - action: action_listen
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+    - slot_is_authenticated: true
+  - action: action_your_balance
+  - action: utter_your_balance
+
+- story: Greeting with noname
+  steps:
+  - slot_was_set:
+    - slot_user_email: null
   - intent: greet
   - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+
+- story: Greeting with user_email
+  steps:
+  - slot_was_set:
+    - slot_user_email:
+      - type: not_null
+  - intent: greet
+  - action: utter_named_greet
+
+- story: Balance response for authenticated case
+  steps:
+  - slot_was_set:
+    - slot_balance_value:
+      - type: not_null
+    - slot_is_authenticated: true
+  - intent: my_balance
+  - action: utter_your_balance
