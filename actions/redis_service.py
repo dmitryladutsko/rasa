@@ -1,6 +1,7 @@
 import os
 import redis
 from dotenv import load_dotenv, find_dotenv
+import warnings
 
 load_dotenv(find_dotenv())
 
@@ -17,13 +18,17 @@ class RedisService:
         return cls._instance
 
     def __init__(self):
-        self.connection_pool = redis.ConnectionPool(
-            host=os.environ.get('HOST'),
-            port=int(os.environ.get('PORT')),
-            db=int(os.environ.get('DB')),
-            decode_responses=True
-        )
-        self.client = redis.StrictRedis(connection_pool=self.connection_pool)
+        try:
+            self.connection_pool = redis.ConnectionPool(
+                host=os.environ.get('HOST'),
+                port=int(os.environ.get('PORT')),
+                db=int(os.environ.get('DB')),
+                decode_responses=True
+            )
+            self.client = redis.StrictRedis(connection_pool=self.connection_pool)
+        except redis.ConnectionError:
+            self.client = None
+            warnings.warn("Redis connection error!")
 
     def store_password(self, user_email, user_otp) -> None:
         """Stores password in Redis"""
