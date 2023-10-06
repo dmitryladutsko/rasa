@@ -6,21 +6,31 @@ load_dotenv(find_dotenv())
 
 
 class RedisService:
-    def __init__(self, user_email, user_otp):
-        self.user_otp = user_otp
-        self.user_email = user_email
+    """Class to handle Redis connection"""
+
+    _instance = None
+
+    def __new__(cls):
+        if not cls._instance:
+            cls._instance = super(RedisService, cls).__new__(cls)
+
+    def __init__(self):
         self.connection_pool = redis.ConnectionPool(
-                                                     host=os.environ.get('HOST'),
-                                                     port=int(os.environ.get('PORT')),
-                                                     db=int(os.environ.get('DB')),
-                                                     decode_responses=True
-                                                        )
+            host=os.environ.get('HOST'),
+            port=int(os.environ.get('PORT')),
+            db=int(os.environ.get('DB')),
+            decode_responses=True
+        )
         self.client = redis.StrictRedis(connection_pool=self.connection_pool)
 
-    def store_password(self) -> None:
+    def store_password(self, user_email, user_otp) -> None:
         """Stores password in Redis"""
-        self.client.setex(self.user_email, 300, self.user_otp)
+        self.client.setex(user_email, 300, user_otp)
 
-    def check_user(self) -> bool:
+    def check_user(self, user_email, user_otp) -> bool:
         """Checks if user exists with such credentials"""
-        return self.client.get(self.user_email) == self.user_otp
+        return self.client.get(user_email) == user_otp
+
+    def delete_password(self, user_email) -> None:
+        """Deletes password from Redis"""
+        self.client.delete(user_email)

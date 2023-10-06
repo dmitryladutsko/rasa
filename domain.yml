@@ -16,7 +16,8 @@ intents:
 actions:
   - action_your_balance
   - action_ask_form_user_credentials_slot_user_password
-  - action_check_auth
+#  - action_check_auth
+  - validate_form_user_credentials
 
 entities:
   - entity_email
@@ -45,6 +46,20 @@ slots:
       influence_conversation: false
       mappings:
       - type: custom
+  slot_number_of_fails:
+    type: any
+    mappings:
+    - type: custom
+  requested_slot:
+    type: categorical
+    influence_conversation: true
+    values:
+      - slot_user_password
+      - slot_user_email
+    mappings:
+      - type: custom
+
+
 
 responses:
   utter_greet:

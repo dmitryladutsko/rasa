@@ -15,9 +15,11 @@ rules:
 - rule: Ask for credentials
   steps:
     - intent: my_balance
-#    - action: utter...
-    - action: form_user_credentials  #form_user_credentials
+    - action: form_user_credentials
     - active_loop: form_user_credentials
+    - slot_was_set:
+      - requested_slot: slot_user_email
+      - slot_is_authenticated: null
 
 - rule: Submit user form
   condition:
@@ -27,17 +29,16 @@ rules:
     - active_loop: null
     - slot_was_set:
       - requested_slot: null
-    - action: action_check_auth
-    - slot_was_set:
-        - slot_is_authenticated: true
+      - slot_is_authenticated: true
     - action: action_your_balance
     - action: utter_your_balance
 
-#- rule: Generate New Password
-#  condition:
-#  - active_loop: form_user_credentials
-#  steps:
-#  - intent: send_me_code
-#  - action: action_generate_password
-#  - action: form_user_credentials
-#  - active_loop: form_user_credentials
+- rule: Balance response for authenticated user
+  condition:
+  - slot_was_set:
+    - slot_balance_value:
+      - type: not_null
+    - slot_is_authenticated: true
+  steps:
+  - intent: my_balance
+  - action: utter_your_balance

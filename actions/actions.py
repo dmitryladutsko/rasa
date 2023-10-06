@@ -2,9 +2,10 @@ import random
 import string
 from typing import *
 
-from rasa_sdk import Action, Tracker
+from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.types import DomainDict
 
 from actions.redis_service import RedisService
 
@@ -30,36 +31,66 @@ class ActionGeneratePassword(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        user_otp = ''.join(random.choices(string.digits, k=6))
-        dispatcher.utter_message(text=f"Your OTP is {user_otp}")
-        dispatcher.utter_message(text=f"Enter your OTP:")
-        user_email = tracker.get_slot("slot_user_email")
+        fails = tracker.get_slot("slot_number_of_fails")
+        fails: int = 0 if fails is None else int(fails)
 
-        connection = RedisService(user_email, user_otp)
+        if not fails:
+            user_otp = ''.join(random.choices(string.digits, k=6))
+            dispatcher.utter_message(text=f"Your OTP is {user_otp}")
+            dispatcher.utter_message(text=f"Enter your OTP:")
+            user_email = tracker.get_slot("slot_user_email")
 
-        if connection.client:
-            connection.store_password()
+            connection = RedisService()
+            if connection.client:
+                connection.store_password(user_email, user_otp)
 
         return []
 
 
-class ActionCheckAuth(Action):
-    """Action to check if the user is authenticated or not"""
+class ValidateUserCredentialsForm(FormValidationAction):
     def name(self) -> Text:
-        return "action_check_auth"
+        return "validate_form_user_credentials"
 
-    def run(self, dispatcher: CollectingDispatcher,
+    def validate_slot_user_password(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
             tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
         user_email = tracker.get_slot("slot_user_email")
-        user_pass = tracker.get_slot("slot_user_password")
+        user_password = slot_value
+        fails = tracker.get_slot("slot_number_of_fails")
+        fails: int = 0 if not fails else int(fails)
 
-        connection = RedisService(user_email, user_pass)
+        connection = RedisService()
+        result: bool = connection.check_user(user_email, user_password)
 
-        if connection.client:
-            if connection.check_user():
-                dispatcher.utter_message(text="Successfully authenticated!")
+        if result:
+            dispatcher.utter_message(text="Successfully authenticated!")
+            requested_slot = None
+        else:
+            dispatcher.utter_message(text="Authentication failed!")
+            fails += 1
+            slot_value = None
+            requested_slot = "slot_user_password"
+
+            if fails > 2:
+                dispatcher.utter_message(text="You have used all 3 attempts!")
+                connection.delete_password(user_email)
+                fails = 0
+                action_generate_password = ActionGeneratePassword()
+                action_generate_password.run(
+                    dispatcher=dispatcher,
+                    tracker=tracker,
+                    domain=domain
+                )
+
             else:
-                dispatcher.utter_message(text="Authorization failed!")
+                dispatcher.utter_message(text=f"Only {3 - fails} attempts left!")
+                dispatcher.utter_message(text="Enter the correct password:")
 
-            return [SlotSet(key="slot_is_authenticated", value=connection.check_user())]
+        return {"slot_user_password": slot_value,
+                "slot_number_of_fails": fails,
+                "requested_slot": requested_slot,
+                "slot_is_authenticated": result}
