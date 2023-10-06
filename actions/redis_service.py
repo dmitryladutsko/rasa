@@ -14,6 +14,8 @@ class RedisService:
         if not cls._instance:
             cls._instance = super(RedisService, cls).__new__(cls)
 
+        return cls._instance
+
     def __init__(self):
         self.connection_pool = redis.ConnectionPool(
             host=os.environ.get('HOST'),
